@@ -1,4 +1,5 @@
 "use client";
+import SocialLogin from "@/component/SocialLogin/SocialLogin";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -98,7 +99,8 @@ const LoginPage = () => {
           >
             Login
           </button>
-
+          <div className="divider text-gray-400">or signin with</div>
+          <SocialLogin />
           {/* Don't have an account? */}
           <p className="mt-4 text-center text-sm text-gray-600">
             Don&apos;t have an account?{" "}

@@ -1,4 +1,5 @@
 "use client";
+import SocialLogin from "@/component/SocialLogin/SocialLogin";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,7 +11,13 @@ const RegisterPage = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
+    const newUser = {
+      name: data.name,
+      email: data.email,
+      imageUrl: data.imageUrl,
+      password: data.password,
+    };
+    console.log("Form Data:", newUser);
   };
 
   return (
@@ -120,6 +127,8 @@ const RegisterPage = () => {
             Register
           </button>
 
+          <div className="divider text-gray-400">or signup with</div>
+          <SocialLogin />
           {/* Already have an account */}
           <p className="mt-4 text-center text-sm text-gray-600">
             Already have an account?{" "}
