@@ -6,7 +6,6 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -65,6 +64,28 @@ const RegisterPage = () => {
             )}
           </div>
 
+          {/* Image URL */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Image URL
+            </label>
+            <input
+              type="url"
+              {...register("imageUrl", {
+                required: "Image URL is required",
+              })}
+              className={`w-full rounded-lg border ${
+                errors.imageUrl ? "border-red-500" : "border-gray-300"
+              } p-2 text-sm focus:ring-emerald-500`}
+              placeholder="Enter profile image URL"
+            />
+            {errors.imageUrl && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.imageUrl.message}
+              </p>
+            )}
+          </div>
+
           {/* Password */}
           <div className="mb-4">
             <label className="block mb-1 text-sm font-medium text-gray-700">
@@ -87,30 +108,6 @@ const RegisterPage = () => {
             {errors.password && (
               <p className="mt-1 text-sm text-red-500">
                 {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-              })}
-              className={`w-full rounded-lg border ${
-                errors.confirmPassword ? "border-red-500" : "border-gray-300"
-              } p-2 text-sm focus:ring-emerald-500`}
-              placeholder="Confirm your password"
-            />
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.confirmPassword.message}
               </p>
             )}
           </div>
