@@ -1,24 +1,19 @@
 "use client";
+import { data } from "autoprefixer";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const Navbar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathName = usePathname();
-  const navLinks = [
-    {
-      title: "Home",
-      path: "/",
-    },
-    {
-      title: "All Recipe",
-      path: "/allRecipe",
-    },
-    {
-      title: "Favorite Recipes",
-      path: "/favoriteRecipes",
-    },
-  ];
+  const session = useSession();
+  // console.log(session);
+  const handleProfileClick = () => {
+    setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown visibility
+  };
 
   return (
     <div className="navbar bg-white shadow-md">
@@ -77,15 +72,68 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link
-          href="/login"
-          className="btn bg-emerald-600 text-white hover:bg-emerald-700"
-        >
-          Login
-        </Link>
+        {session?.status === "authenticated" && (
+          <div className="relative">
+            <button
+              onClick={handleProfileClick}
+              className="flex items-center gap-2 p-2 rounded-full"
+            >
+              {session?.data?.user?.image ? (
+                <Image
+                  src={session?.data?.user?.image}
+                  alt="User Image"
+                  height={200}
+                  width={200}
+                  className="h-10 w-10 rounded-full"
+                />
+              ) : (
+                <div className="h-10 w-10 bg-gray-300 rounded-full flex items-center justify-center text-black">
+                  {session?.data?.user?.name?.[0]?.toUpperCase()}
+                </div>
+              )}
+            </button>
+
+            {/* Dropdown with Name and Logout */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 p-4 bg-white shadow-md rounded-lg w-48">
+                <p className="font-semibold text-gray-700">
+                  {session?.data?.user?.name}
+                </p>
+                <button
+                  className="w-full mt-2 p-2 text-sm text-white font-semibold bg-green-500 rounded-md hover:bg-green-600"
+                  onClick={() => signOut()}
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {session?.status === "loading" && <p>Loading...</p>}
+        {session?.status === "unauthenticated" && (
+          <Link
+            href="/login"
+            className="btn bg-emerald-600 text-white hover:bg-emerald-700"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
 };
-
+const navLinks = [
+  {
+    title: "Home",
+    path: "/",
+  },
+  {
+    title: "All Recipe",
+    path: "/allRecipe",
+  },
+  {
+    title: "Favorite Recipes",
+    path: "/favoriteRecipes",
+  },
+];
 export default Navbar;

@@ -1,23 +1,40 @@
 "use client";
 import SocialLogin from "@/component/SocialLogin/SocialLogin";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const newUser = {
       name: data.name,
       email: data.email,
-      imageUrl: data.imageUrl,
+      image: data.imageUrl,
       password: data.password,
     };
-    console.log("Form Data:", newUser);
+    // console.log("Form Data:", newUser);
+    const res = await fetch("http://localhost:3000/register/api", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+    console.log(res);
+    if (res.status === 200) {
+      toast.success("Account Created");
+      reset();
+      router.push("/");
+    }
   };
 
   return (

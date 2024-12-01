@@ -1,18 +1,34 @@
 "use client";
 import SocialLogin from "@/component/SocialLogin/SocialLogin";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("Login Data:", data);
+    const email = data?.email;
+    const password = data?.password;
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    console.log(res);
+    if (res.status === 200) {
+      toast.success("Logged In");
+      router.push("/");
+    }
   };
 
   return (
@@ -72,24 +88,6 @@ const LoginPage = () => {
                 {errors.password.message}
               </p>
             )}
-          </div>
-
-          {/* Remember Me & Forgot Password */}
-          <div className="mb-4 flex items-center justify-between">
-            <label className="flex items-center text-sm text-gray-700">
-              <input
-                type="checkbox"
-                {...register("rememberMe")}
-                className="mr-2 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-              />
-              Remember Me
-            </label>
-            <a
-              href="/forgot-password"
-              className="text-sm text-emerald-600 hover:underline"
-            >
-              Forgot Password?
-            </a>
           </div>
 
           {/* Submit Button */}

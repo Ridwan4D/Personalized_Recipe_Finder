@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/component/Navbar/Navbar";
 import Footer from "@/component/Footer/Footer";
 import AuthProvider from "@/Provider/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footer />
+          <Toaster />
         </body>
       </AuthProvider>
     </html>
