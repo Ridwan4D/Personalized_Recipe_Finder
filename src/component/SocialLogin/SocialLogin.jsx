@@ -1,12 +1,14 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 const SocialLogin = () => {
   const { status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const path = searchParams.get("redirect");
 
   // Redirect the user if authenticated
   useEffect(() => {
@@ -17,7 +19,10 @@ const SocialLogin = () => {
 
   const handleSocialLogin = async (provider) => {
     try {
-      const res = await signIn(provider, { redirect: false });
+      const res = await signIn(provider, {
+        redirect: true,
+        callbackUrl: path ? path : "/",
+      });
       if (res?.error) {
         console.error("Error during sign-in:", res.error);
       }

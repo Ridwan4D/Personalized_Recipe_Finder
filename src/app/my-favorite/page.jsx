@@ -47,6 +47,7 @@ const FavoriteRecipePage = () => {
         );
         // console.log(deleted.status);
         if (deleted?.status === 200) {
+          loadData();
           toast.success("Recipe Deleted");
         }
       }

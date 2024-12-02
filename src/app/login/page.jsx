@@ -2,7 +2,7 @@
 import SocialLogin from "@/component/SocialLogin/SocialLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -14,6 +14,8 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const searchParams = useSearchParams();
+  const path = searchParams.get("redirect");
 
   const onSubmit = async (data) => {
     console.log("Login Data:", data);
@@ -22,7 +24,8 @@ const LoginPage = () => {
     const res = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: path ? path : "/",
     });
     console.log(res);
     if (res.status === 200) {

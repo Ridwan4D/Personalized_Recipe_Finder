@@ -16,7 +16,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-white shadow-md">
+    <div className="navbar bg-white shadow-md z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div
@@ -41,7 +41,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-white rounded-box mt-3 w-52 p-2 shadow z-50"
           >
             {navLinks.map((link, idx) => (
               <li
@@ -95,7 +95,7 @@ const Navbar = () => {
 
             {/* Dropdown with Name and Logout */}
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 p-4 bg-white shadow-md rounded-lg w-48">
+              <div className="absolute right-0 mt-2 p-4 bg-white shadow-md rounded-lg w-48 z-50">
                 <p className="font-semibold text-gray-700">
                   {session?.data?.user?.name}
                 </p>
