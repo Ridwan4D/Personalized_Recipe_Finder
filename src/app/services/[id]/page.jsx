@@ -11,6 +11,19 @@ const RecipeDetailsPage = ({ params }) => {
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [recipes, setRecipes] = useState([]);
+  const loadData = async () => {
+    const res = await fetch(
+      `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
+    );
+    const data = await res.json();
+    console.log(data);
+    setRecipes(data.recipes);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [session]);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -29,32 +42,38 @@ const RecipeDetailsPage = ({ params }) => {
     };
     fetchRecipe();
   }, [id]);
+  const theRecipe = recipes.find((recipe) => recipe?.recipeId === id);
   const handleAddFavorite = async () => {
-    if (session.status == "authenticated") {
-      const favInfo = {
-        recipeId: recipe?._id,
-        name: recipe?.name,
-        image: recipe?.image,
-        category: recipe?.category,
-        adderMail: session?.data?.user?.email,
-      };
-      console.log(favInfo);
-      const res = await fetch(
-        "http://localhost:3000/addFevorite/api/fevorite",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(favInfo),
-        }
-      );
-      console.log(res);
-      if (res.status === 200) {
-        toast.success("Added to Favorite");
-      }
+    if (theRecipe) {
+      toast.error("Already added");
+      return;
     } else {
-      toast.error("User not found");
+      if (session.status == "authenticated") {
+        const favInfo = {
+          recipeId: recipe?._id,
+          name: recipe?.name,
+          image: recipe?.image,
+          category: recipe?.category,
+          adderMail: session?.data?.user?.email,
+        };
+        console.log(favInfo);
+        const res = await fetch(
+          "http://localhost:3000/addFevorite/api/fevorite",
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(favInfo),
+          }
+        );
+        console.log(res);
+        if (res.status === 200) {
+          toast.success("Added to Favorite");
+        }
+      } else {
+        toast.error("User not found");
+      }
     }
   };
   const handleGoBack = () => {
