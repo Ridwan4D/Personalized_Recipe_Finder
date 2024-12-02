@@ -58,7 +58,7 @@ const HomeRecipes = async () => {
             </div>
             {/* View Details Button */}
             <Link
-              href={`/recipeDetails/${recipe?._id}`}
+              href={`/services/${recipe?._id}`}
               className="block mt-4 text-center text-white bg-green-600 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               View Details

@@ -133,7 +133,7 @@ const navLinks = [
   },
   {
     title: "Favorite Recipes",
-    path: "/favoriteRecipes",
+    path: "/my-favorite",
   },
 ];
 export default Navbar;

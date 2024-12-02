@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import toast from "react-hot-toast";
 
 const handler = NextAuth({
+  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 15 * 24 * 60 * 60,
