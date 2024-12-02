@@ -26,7 +26,12 @@ const FavoriteRecipePage = () => {
     // Add logic to generate/download PDF
   };
 
-  const handleDelete = (id) => {};
+  const handleDelete = async (id) => {
+    const deleted = await fetch(
+      `http://localhost:3000/my-favorite/api/deleteFavorite/${id}`
+    );
+    console.log(deleted);
+  };
 
   return (
     <div className="h-auto mt-20 bg-gradient-to-b from-green-50 to-green-100 py-8">
@@ -95,7 +100,7 @@ const FavoriteRecipePage = () => {
                       {/* Delete Button */}
                       <button
                         className="btn btn-sm btn-error"
-                        onClick={() => handleDelete(recipe.id)}
+                        onClick={() => handleDelete(recipe._id)}
                       >
                         Delete
                       </button>
