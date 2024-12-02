@@ -56,7 +56,7 @@ const RecipeDetailsPage = ({ params }) => {
           category: recipe?.category,
           adderMail: session?.data?.user?.email,
         };
-        console.log(favInfo);
+        // console.log(favInfo);
         const res = await fetch(
           "http://localhost:3000/addFevorite/api/fevorite",
           {
@@ -67,7 +67,7 @@ const RecipeDetailsPage = ({ params }) => {
             body: JSON.stringify(favInfo),
           }
         );
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
           toast.success("Added to Favorite");
         }

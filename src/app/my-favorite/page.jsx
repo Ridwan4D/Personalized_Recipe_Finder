@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const FavoriteRecipePage = () => {
   const session = useSession();
@@ -13,7 +15,7 @@ const FavoriteRecipePage = () => {
       `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
     );
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     setRecipes(data.recipes);
   };
 
@@ -27,10 +29,28 @@ const FavoriteRecipePage = () => {
   };
 
   const handleDelete = async (id) => {
-    const deleted = await fetch(
-      `http://localhost:3000/my-favorite/api/deleteFavorite/${id}`
-    );
-    console.log(deleted);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleted = await fetch(
+          `http://localhost:3000/my-favorite/api/deleteFavorite/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        // console.log(deleted.status);
+        if (deleted?.status === 200) {
+          toast.success("Recipe Deleted");
+        }
+      }
+    });
   };
 
   return (
