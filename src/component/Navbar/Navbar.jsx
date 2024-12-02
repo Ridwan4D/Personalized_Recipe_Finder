@@ -129,7 +129,7 @@ const navLinks = [
   },
   {
     title: "All Recipe",
-    path: "/allRecipe",
+    path: "/allRecipePage",
   },
   {
     title: "Favorite Recipes",
