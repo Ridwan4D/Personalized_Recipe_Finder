@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const FavoriteRecipePage = () => {
@@ -25,10 +26,7 @@ const FavoriteRecipePage = () => {
     // Add logic to generate/download PDF
   };
 
-  const handleDelete = (id) => {
-    console.log(`Deleting recipe ID: ${id}`);
-    // Add logic to delete the recipe
-  };
+  const handleDelete = (id) => {};
 
   return (
     <div className="h-auto mt-20 bg-gradient-to-b from-green-50 to-green-100 py-8">
@@ -81,12 +79,12 @@ const FavoriteRecipePage = () => {
                   <td className="border border-green-300 px-4 py-3">
                     <div className="flex justify-center gap-3">
                       {/* Details Button */}
-                      <button
+                      <Link
+                        href={`/services/${recipe?.recipeId}`}
                         className="btn btn-sm btn-info"
-                        onClick={() => handleDetails(recipe.id)}
                       >
                         Details
-                      </button>
+                      </Link>
                       {/* Download PDF Button */}
                       <button
                         className="btn btn-sm btn-success"
