@@ -3,10 +3,9 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
-import toast from "react-hot-toast";
 
 const handler = NextAuth({
-  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+  // secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
     maxAge: 15 * 24 * 60 * 60,

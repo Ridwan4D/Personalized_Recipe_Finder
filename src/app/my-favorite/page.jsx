@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -11,22 +12,26 @@ const FavoriteRecipePage = () => {
   const [recipes, setRecipes] = useState([]);
 
   const loadData = async () => {
-    const res = await fetch(
-      `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
-    );
-    const data = await res.json();
-    // console.log(data);
-    setRecipes(data.recipes);
+    try {
+      const res = await fetch(
+        `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch favorite recipes.");
+      }
+      const data = await res.json();
+      setRecipes(data.recipes);
+    } catch (error) {
+      console.error("Error loading recipes:", error);
+      toast.error("Failed to load favorite recipes. Please try again later.");
+    }
   };
 
   useEffect(() => {
-    loadData();
+    if (session?.data?.user?.email) {
+      loadData();
+    }
   }, [session]);
-
-  const handleDownloadPDF = (id) => {
-    console.log(`Downloading PDF for recipe ID: ${id}`);
-    // Add logic to generate/download PDF
-  };
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -39,16 +44,23 @@ const FavoriteRecipePage = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const deleted = await fetch(
-          `http://localhost:3000/my-favorite/api/deleteFavorite/${id}`,
-          {
-            method: "DELETE",
+        try {
+          const deleted = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/my-favorite/api/deleteFavorite/${id}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (!deleted.ok) {
+            throw new Error("Failed to delete the recipe.");
           }
-        );
-        // console.log(deleted.status);
-        if (deleted?.status === 200) {
+
           loadData();
           toast.success("Recipe Deleted");
+        } catch (error) {
+          console.error("Error deleting recipe:", error);
+          toast.error("Failed to delete the recipe. Please try again.");
         }
       }
     });
@@ -62,7 +74,6 @@ const FavoriteRecipePage = () => {
       {recipes.length > 0 ? (
         <div className="overflow-x-auto mx-auto w-full">
           <table className="table-auto w-full border-collapse border border-green-300 shadow-lg">
-            {/* Table Header */}
             <thead className="bg-green-700 text-white">
               <tr>
                 <th className="px-4 py-3 border border-green-300">Image</th>
@@ -75,9 +86,8 @@ const FavoriteRecipePage = () => {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {/* Render Rows Dynamically */}
-              {recipes.map((recipe) => (
-                <tr key={recipe.id} className="hover:bg-green-50">
+              {recipes.map((recipe, idx) => (
+                <tr key={idx} className="hover:bg-green-50">
                   <td className="border border-green-300 px-4 py-3">
                     <div className="flex justify-center">
                       <div className="avatar">
@@ -104,21 +114,12 @@ const FavoriteRecipePage = () => {
                   </td>
                   <td className="border border-green-300 px-4 py-3">
                     <div className="flex justify-center gap-3">
-                      {/* Details Button */}
                       <Link
                         href={`/services/${recipe?.recipeId}`}
                         className="btn btn-sm btn-info"
                       >
                         Details
                       </Link>
-                      {/* Download PDF Button */}
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => handleDownloadPDF(recipe.id)}
-                      >
-                        Download PDF
-                      </button>
-                      {/* Delete Button */}
                       <button
                         className="btn btn-sm btn-error"
                         onClick={() => handleDelete(recipe._id)}

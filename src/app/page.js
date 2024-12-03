@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import HomeRecipes from "@/component/HomeRecipes/HomeRecipes";
 import Slider from "@/component/Slider/Slider";
 

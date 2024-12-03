@@ -1,15 +1,25 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const getRecipes = async () => {
-  const res = await fetch("http://localhost:3000/services/api/allRecipe");
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/services/api/allRecipe`
+  );
   const recipes = res.json();
   return recipes;
 };
 
-const HomeRecipes = async () => {
-  const { recipes } = await getRecipes();
+const HomeRecipes = () => {
+  const [recipes, setRecipes] = useState([]);
+  const loadData = async () => {
+    const { recipes } = await getRecipes();
+    setRecipes(recipes);
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
   // console.log(recipes);
   return (
     <section className="p-6 bg-gray-50">

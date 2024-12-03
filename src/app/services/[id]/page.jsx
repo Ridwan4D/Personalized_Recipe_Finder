@@ -1,36 +1,48 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 
 const RecipeDetailsPage = ({ params }) => {
   const session = useSession();
-  const { id } = params;
+  const { id } = React.use(params);
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
+
   const loadData = async () => {
-    const res = await fetch(
-      `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
-    );
-    const data = await res.json();
-    console.log(data);
-    setRecipes(data.recipes);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/my-favorite/api/${session?.data?.user?.email}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch favorite recipes.");
+      }
+      const data = await res.json();
+      setRecipes(data.recipes);
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   useEffect(() => {
-    loadData();
+    if (session.status === "authenticated") {
+      loadData();
+    }
   }, [session]);
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/services/api/${id}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/services/api/${id}`
+        );
         if (!res.ok) {
-          throw new Error("Failed to fetch the recipe");
+          throw new Error("Failed to fetch the recipe.");
         }
         const data = await res.json();
         setRecipe(data);
@@ -42,13 +54,16 @@ const RecipeDetailsPage = ({ params }) => {
     };
     fetchRecipe();
   }, [id]);
+
   const theRecipe = recipes.find((recipe) => recipe?.recipeId === id);
+
   const handleAddFavorite = async () => {
-    if (theRecipe) {
-      toast.error("Already added");
-      return;
-    } else {
-      if (session.status == "authenticated") {
+    try {
+      if (theRecipe) {
+        toast.error("Already added to favorites.");
+        return;
+      }
+      if (session.status === "authenticated") {
         const favInfo = {
           recipeId: recipe?._id,
           name: recipe?.name,
@@ -56,9 +71,9 @@ const RecipeDetailsPage = ({ params }) => {
           category: recipe?.category,
           adderMail: session?.data?.user?.email,
         };
-        // console.log(favInfo);
+
         const res = await fetch(
-          "http://localhost:3000/addFevorite/api/fevorite",
+          `${process.env.NEXT_PUBLIC_BASE_URL}/addFevorite/api/fevorite`,
           {
             method: "POST",
             headers: {
@@ -67,15 +82,19 @@ const RecipeDetailsPage = ({ params }) => {
             body: JSON.stringify(favInfo),
           }
         );
-        // console.log(res);
-        if (res.status === 200) {
-          toast.success("Added to Favorite");
+        console.log(res);
+        if (!res.ok) {
+          throw new Error("Failed to add to favorites.");
         }
+        toast.success("Added to Favorite.");
       } else {
-        toast.error("User not found");
+        toast.error("User not authenticated.");
       }
+    } catch (err) {
+      toast.error(err.message);
     }
   };
+
   const handleGoBack = () => {
     window.history.back();
   };

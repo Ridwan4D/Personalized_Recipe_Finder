@@ -1,17 +1,20 @@
 import { connectDB } from "@/lib/connectDB";
+import { NextResponse } from "next/server";
 
 export const GET = async (request, { params }) => {
   const db = await connectDB();
   const favCollection = db.collection("favorites");
   try {
-    const recipes = await favCollection
-      .find({ adderMail: params?.email })
-      .toArray();
-    return Response.json({ recipes });
+    const { email } = await params;
+    const recipes = await favCollection.find({ adderMail: email }).toArray();
+    return NextResponse.json({ recipes });
   } catch (error) {
-    console.error(error); // Log the error
-    return new Response(JSON.stringify({ error: "Failed to fetch recipes" }), {
-      status: 500,
-    });
+    // console.error(error); 
+    return new NextResponse(
+      JSON.stringify({ error: "Failed to fetch recipes" }),
+      {
+        status: 500,
+      }
+    );
   }
 };
