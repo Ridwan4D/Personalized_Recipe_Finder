@@ -135,5 +135,9 @@ const navLinks = [
     title: "Favorite Recipes",
     path: "/my-favorite",
   },
+  {
+    title: "Contact Us",
+    path: "/contact",
+  },
 ];
 export default Navbar;
