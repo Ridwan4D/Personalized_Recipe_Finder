@@ -156,18 +156,18 @@ const RegisterComp = () => {
           </button>
 
           <div className="divider text-gray-400">or signup with</div>
-          <SocialLogin />
-          {/* Already have an account */}
-          <p className="mt-4 text-center text-sm text-gray-600">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="font-semibold text-emerald-600 hover:underline"
-            >
-              Login here
-            </a>
-          </p>
         </form>
+        <SocialLogin />
+        {/* Already have an account */}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <a
+            href="/login"
+            className="font-semibold text-emerald-600 hover:underline"
+          >
+            Login here
+          </a>
+        </p>
       </div>
     </div>
   );

@@ -109,18 +109,18 @@ const LoginComp = () => {
             Login
           </button>
           <div className="divider text-gray-400">or signin with</div>
-          <SocialLogin />
-          {/* Don't have an account? */}
-          <p className="mt-4 text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="font-semibold text-emerald-600 hover:underline"
-            >
-              Sign up
-            </Link>
-          </p>
         </form>
+        <SocialLogin />
+        {/* Don't have an account? */}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="font-semibold text-emerald-600 hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

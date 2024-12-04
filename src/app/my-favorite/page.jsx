@@ -14,7 +14,7 @@ const FavoriteRecipePage = () => {
   const loadData = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/my-favorite/api/${session?.data?.user?.email}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/my-favorite/api/${session?.data?.user?.email}`
       );
       if (!res.ok) {
         throw new Error("Failed to fetch favorite recipes.");

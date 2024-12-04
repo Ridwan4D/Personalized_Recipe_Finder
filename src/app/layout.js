@@ -4,6 +4,7 @@ import Navbar from "@/component/Navbar/Navbar";
 import Footer from "@/component/Footer/Footer";
 import AuthProvider from "@/Provider/AuthProvider";
 import { Toaster } from "react-hot-toast";
+import SearchBar from "@/component/SearchBar/SearchBar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1600px] mx-auto`}
         >
           <Navbar />
+          <SearchBar />
           {children}
           <Footer />
           <Toaster />
