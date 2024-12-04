@@ -91,11 +91,11 @@ const SearchBar = () => {
                   key={idx}
                   href={`/services/${recipe?._id}`}
                   onClick={() => showResults(false)}
-                  className="flex items-center p-3 bg-white rounded-md hover:shadow-md"
+                  className="flex flex-col md:flex-row items-center p-3 bg-white rounded-md hover:shadow-md"
                 >
                   <Image
                     src={recipe?.image}
-                    alt={recipe?.title}
+                    alt={recipe?.name}
                     height={100}
                     width={100}
                     className="w-16 h-16 object-cover rounded-md"

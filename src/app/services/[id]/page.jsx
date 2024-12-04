@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -82,7 +81,6 @@ const RecipeDetailsPage = ({ params }) => {
             body: JSON.stringify(favInfo),
           }
         );
-        console.log(res);
         if (!res.ok) {
           throw new Error("Failed to add to favorites.");
         }
@@ -102,15 +100,15 @@ const RecipeDetailsPage = ({ params }) => {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        <p className="text-xl text-green-700">Loading...</p>
+        <p className="text-lg sm:text-xl text-green-700">Loading...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto p-6 text-center">
-        <h1 className="text-2xl font-bold text-red-600">
+      <div className="container mx-auto px-4 py-6 text-center">
+        <h1 className="text-xl sm:text-2xl font-bold text-red-600">
           Error: Unable to load recipe details
         </h1>
         <p className="text-gray-600">{error}</p>
@@ -119,80 +117,69 @@ const RecipeDetailsPage = ({ params }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-green-100 px-2 py-1 mt-16">
-      {/* Action Buttons at the Top */}
-      <div className="flex justify-between gap-4 mt-8">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-green-100 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 mt-4 sm:mt-8">
         <button
           onClick={handleGoBack}
-          className="bg-gray-300 text-gray-800 py-3 px-6 rounded-full shadow-lg hover:bg-gray-400 hover:shadow-xl transition-all duration-300"
+          className="bg-gray-300 text-gray-800 py-2 px-4 sm:py-3 sm:px-6 rounded-full shadow-lg hover:bg-gray-400 hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
         >
           Go Back
         </button>
         <button
           onClick={handleAddFavorite}
-          className="bg-green-600 text-white py-3 px-6 rounded-full shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300"
+          className="bg-green-600 text-white py-2 px-4 sm:py-3 sm:px-6 rounded-full shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
         >
           Add to Favorite
         </button>
       </div>
-      {/* Header Section */}
-      <div className="container mx-auto text-center">
-        <h1 className="text-5xl font-bold text-green-700 mb-4">
+      <div className="container mx-auto text-center mt-6 sm:mt-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-700 mb-2 sm:mb-4">
           {recipe?.name}
         </h1>
-        <p className="text-lg text-green-600 italic">{recipe?.category}</p>
+        <p className="text-base sm:text-lg text-green-600 italic">
+          {recipe?.category}
+        </p>
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mt-6">
-        {/* Recipe Image */}
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 mt-4 sm:mt-6">
         <div className="flex justify-center">
           <Image
             src={recipe?.image}
             alt={recipe?.name}
-            width={600}
-            height={600}
-            className="rounded-lg shadow-xl border-4 border-green-200 hover:scale-105 transition-transform duration-300"
+            width={500}
+            height={500}
+            className="rounded-lg shadow-xl border-4 object-contain border-green-200 hover:scale-105 transition-transform duration-300"
           />
         </div>
-
-        {/* Recipe Details */}
-        <div className="bg-white p-8 rounded-lg shadow-lg border border-green-300">
-          {/* Nutritional Info */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-green-700 mb-4">
+        <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg border border-green-300">
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-lg sm:text-2xl font-semibold text-green-700 mb-2 sm:mb-4">
               Nutritional Information
             </h2>
-            <div className="text-gray-700 space-y-2">
-              <p>
-                <span className="font-bold text-green-600">Calories:</span>{" "}
-                {recipe?.calories} kcal
-              </p>
-              <p>
-                <span className="font-bold text-green-600">Protein:</span>{" "}
-                {recipe?.protein}g
-              </p>
-            </div>
+            <p className="text-sm sm:text-base text-gray-700">
+              <span className="font-bold text-green-600">Calories:</span>{" "}
+              {recipe?.calories} kcal
+            </p>
+            <p className="text-sm sm:text-base text-gray-700">
+              <span className="font-bold text-green-600">Protein:</span>{" "}
+              {recipe?.protein}g
+            </p>
           </div>
-
-          {/* Ingredients */}
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-green-700 mb-4">
+          <div className="mb-4 sm:mb-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-green-700 mb-2 sm:mb-4">
               Ingredients
             </h3>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <ul className="list-disc list-inside text-sm sm:text-base text-gray-700">
               {recipe?.ingredients.map((ingredient, index) => (
                 <li key={index}>{ingredient}</li>
               ))}
             </ul>
           </div>
-
-          {/* Description */}
           <div>
-            <h3 className="text-xl font-semibold text-green-700 mb-4">
+            <h3 className="text-lg sm:text-xl font-semibold text-green-700 mb-2 sm:mb-4">
               Description
             </h3>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700">
               {recipe?.description}
             </p>
           </div>
