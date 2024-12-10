@@ -66,7 +66,7 @@ const SearchBar = () => {
         <input
           type="text"
           name="search"
-          placeholder="Search recipes or ingredients..."
+          placeholder="Search recipes"
           className="flex-grow border border-green-400 p-3 text-lg rounded-l-md focus:outline-none focus:border-green-600"
         />
         <button
