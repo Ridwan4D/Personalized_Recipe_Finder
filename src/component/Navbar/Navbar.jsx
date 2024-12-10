@@ -63,7 +63,7 @@ const Navbar = () => {
             <li
               key={idx}
               className={`${
-                pathName === link?.path ? "text-emerald-600" : "text-gray-700"
+                pathName === link?.path ? "text-emerald-600 underline" : "text-gray-700"
               } font-semibold hover:text-emerald-400`}
             >
               <Link href={link.path}>{link.title}</Link>
