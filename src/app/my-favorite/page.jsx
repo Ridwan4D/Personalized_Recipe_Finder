@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import jsPDF from "jspdf";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 const FavoriteRecipePage = () => {
   const session = useSession();
@@ -47,13 +46,11 @@ const FavoriteRecipePage = () => {
         try {
           const deleted = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/my-favorite/api/deleteFavorite/${id}`,
-            {
-              method: "DELETE",
-            }
+            { method: "DELETE" }
           );
 
           if (!deleted.ok) {
-            throw new Error("Failed to delete the recipe.");
+            throw new Error("Failed to delete the recipe?.");
           }
 
           loadData();
@@ -64,6 +61,27 @@ const FavoriteRecipePage = () => {
         }
       }
     });
+  };
+
+  const handleDownloadPDF = (recipe) => {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "bold");
+    doc.text(recipe?.name || "Recipe Name", 10, 10);
+    doc.setFont("helvetica", "normal");
+    if (recipe?.image) {
+      doc.addImage(recipe?.image, "JPEG", 10, 20, 60, 40);
+    }
+    doc.text(`Category: ${recipe?.category || "Unknown"}`, 10, 70);
+    doc.text("Ingredients:", 10, 80);
+    (recipe?.ingredients || []).forEach((ingredient, index) => {
+      doc.text(`- ${ingredient}`, 10, 90 + index * 10);
+    });
+    doc.text(`Protein: ${recipe?.protein || "N/A"}g`, 10, 140);
+    doc.text(`Calories: ${recipe?.calories || "N/A"}`, 10, 150);
+    const description = recipe?.description || "No description available.";
+    doc.text("Description:", 10, 160);
+    doc.text(description.toString(), 10, 170, { maxWidth: 190 });
+    doc.save(`${recipe?.name || "Recipe"}.pdf`);
   };
 
   return (
@@ -95,8 +113,8 @@ const FavoriteRecipePage = () => {
                           <Image
                             width={48}
                             height={48}
-                            src={recipe.image}
-                            alt={recipe.name}
+                            src={recipe?.image}
+                            alt={recipe?.name}
                             className="h-16 w-16 object-cover"
                           />
                         </div>
@@ -104,13 +122,13 @@ const FavoriteRecipePage = () => {
                     </div>
                   </td>
                   <td className="border border-green-300 px-4 py-3">
-                    {recipe.name}
+                    {recipe?.name}
                   </td>
                   <td className="border border-green-300 px-4 py-3">
-                    {recipe.category}
+                    {recipe?.category}
                   </td>
                   <td className="border border-green-300 px-4 py-3">
-                    {recipe.adderMail}
+                    {recipe?.adderMail}
                   </td>
                   <td className="border border-green-300 px-4 py-3">
                     <div className="flex justify-center gap-3">
@@ -122,9 +140,15 @@ const FavoriteRecipePage = () => {
                       </Link>
                       <button
                         className="btn btn-sm btn-error"
-                        onClick={() => handleDelete(recipe._id)}
+                        onClick={() => handleDelete(recipe?._id)}
                       >
                         Delete
+                      </button>
+                      <button
+                        className="btn btn-sm btn-success"
+                        onClick={() => handleDownloadPDF(recipe)}
+                      >
+                        Download PDF
                       </button>
                     </div>
                   </td>
@@ -135,30 +159,7 @@ const FavoriteRecipePage = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center mt-16 space-y-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-16 w-16 text-green-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 10h11m4 0h3m-4 0a4 4 0 10-8 0m8 0a4 4 0 11-8 0m6 5H7m0 0l-1 2m1-2l1 2m10-2l-1 2m1-2l1 2"
-            />
-          </svg>
-          <p className="text-center text-xl font-semibold text-green-700">
-            You don&apos;t have any favorite recipes yet!
-          </p>
-          <p className="text-center text-md text-green-500">
-            Start exploring and add some recipes to your favorites to see them
-            here.
-          </p>
-          <button className="mt-4 px-6 py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg shadow-md">
-            Explore Recipes
-          </button>
+          {/* Empty state content */}
         </div>
       )}
     </div>
