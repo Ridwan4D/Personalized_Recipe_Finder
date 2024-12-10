@@ -21,9 +21,23 @@ const Footer = () => {
             </h3>
             <ul>
               <li>
-                <Link href="/about">
+                <Link href="/">
                   <span className="text-sm hover:text-green-400 cursor-pointer">
-                    About Us
+                    Home
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/allRecipePage">
+                  <span className="text-sm hover:text-green-400 cursor-pointer">
+                    All Recipe
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-favorite">
+                  <span className="text-sm hover:text-green-400 cursor-pointer">
+                    Favorite
                   </span>
                 </Link>
               </li>
@@ -31,13 +45,6 @@ const Footer = () => {
                 <Link href="/contact">
                   <span className="text-sm hover:text-green-400 cursor-pointer">
                     Contact
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy">
-                  <span className="text-sm hover:text-green-400 cursor-pointer">
-                    Privacy Policy
                   </span>
                 </Link>
               </li>
